@@ -37,19 +37,19 @@ We also cast the interval as a factor that looks like "nnnn", and the date in PO
 
 ## What is mean total number of steps taken per day?
 
-First, we aggregate the steps by day:
+Aggregate the steps by day:
 
 ```{r stepsPerDay}
 steps_by_day <- aggregate(x=steps[c("steps")], FUN="sum", by=list(Group.date=steps$date))
 ```
 
-Then our histogram of steps per day:
+Histogram of same:
 
 ```{r dailyStepsHistogram}
 hist(steps_by_day$steps, breaks=20, main="Frequency of Steps per Day", xlab="Steps in a Day")
 ```
 
-Finally, our average values of steps per day:
+Calculate mean and median steps per day:
 
 ```{r meanSteps}
 mean_steps   <- mean(steps_by_day$steps, na.rm=TRUE)
@@ -60,7 +60,7 @@ The mean number of steps per day is `r sprintf("%0.1f", mean_steps)`, and the me
 
 ## What is the average daily activity pattern?
 
-Break down steps by interval:
+Break down steps by interval and plot:
 
 ```{r stepsByInterval}
 steps_by_interval <- aggregate(steps ~ interval, steps, function(x) sum(x, na.rm=TRUE))
@@ -68,13 +68,27 @@ steps_by_interval <- aggregate(steps ~ interval, steps, function(x) sum(x, na.rm
 plot(steps_by_interval$interval,
      steps_by_interval$steps,
      type="l",
-     xlab="Interval",
+     main="Mean Steps through the Day",
+     xlab="Five-Minute Interval",
      ylab="Steps")
 
 # Lines don't seem to come out, so add this as backup.
 lines(steps_by_interval$interval,
       steps_by_interval$steps)
 ```
+
+Find the interval with the maximum number of steps:
+
+```{r findMaxStepInterval}
+max_steps <- max(steps_by_interval$steps)
+
+max_interval <- steps_by_interval$interval[
+    which.max(steps_by_interval$steps == max_steps)]
+```
+
+The interval with the highest number of steps, `r max_steps`,
+begins at `r max_interval`.
+
 
 ## Imputing missing values
 
