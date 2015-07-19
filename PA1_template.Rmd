@@ -10,11 +10,13 @@ Load and analyze activity data, per assignment.
 First, some basic setup:
 
 - Load required libraries
-- Set echo = TRUE (per assignment)
+- Set echo=TRUE (per assignment)
 
 ```{r setup}
 library(knitr)
-opts_chunk$set(echo = TRUE)
+library(plyr)
+library(dplyr)
+opts_chunk$set(echo=TRUE)
 ```
 
 ## Loading and preprocessing the data
@@ -26,15 +28,35 @@ if (! ("activity.csv" %in% files)) {
     unzip("activity.zip")
 }
 
-steps <- read.csv("activity.csv", as.is = TRUE)
-steps$interval <- sprintf("%04d", steps$interval)
-steps$date     <- as.POSIXlt(steps$date, format="%Y-%m-%d")
+steps <- read.csv("activity.csv", as.is=TRUE)
+steps$interval <- as.factor(sprintf("%04d", steps$interval))
+#steps$pdate    <- as.POSIXlt(steps$date, format="%Y-%m-%d")
 ```
 
+We also cast the interval as a factor that looks like "nnnn", and the date in POSIX format.
 
 ## What is mean total number of steps taken per day?
 
+First, we aggregate the steps by day:
 
+```{r stepsPerDay}
+steps_by_day <- aggregate(x=steps[c("steps")], FUN="sum", by=list(Group.date=steps$date))
+```
+
+Then our histogram of steps per day:
+
+```{r dailyStepsHistogram}
+hist(steps_by_day$steps, breaks=20, main="Frequency of Steps per Day", xlab="Steps in a Day")
+```
+
+Finally, our average values of steps per day:
+
+```{r meanSteps}
+mean_steps   <- mean(steps_by_day$steps, na.rm=TRUE)
+median_steps <- median(steps_by_day$steps, na.rm=TRUE)
+```
+
+The mean number of steps per day is `r sprintf("%0.1f", mean_steps)`, and the median is `r median_steps`.
 
 ## What is the average daily activity pattern?
 
