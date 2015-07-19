@@ -60,7 +60,21 @@ The mean number of steps per day is `r sprintf("%0.1f", mean_steps)`, and the me
 
 ## What is the average daily activity pattern?
 
+Break down steps by interval:
 
+```{r stepsByInterval}
+steps_by_interval <- aggregate(steps ~ interval, steps, function(x) sum(x, na.rm=TRUE))
+
+plot(steps_by_interval$interval,
+     steps_by_interval$steps,
+     type="l",
+     xlab="Interval",
+     ylab="Steps")
+
+# Lines don't seem to come out, so add this as backup.
+lines(steps_by_interval$interval,
+      steps_by_interval$steps)
+```
 
 ## Imputing missing values
 
