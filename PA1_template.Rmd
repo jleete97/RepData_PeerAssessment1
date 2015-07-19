@@ -130,7 +130,7 @@ Calculate statistics on, and plot histogram of, "corrected" data set:
 ```{r showCorrectedValues}
 corrected_steps_by_day <- aggregate(x = corrected[c("steps")],
                                     FUN = "sum",
-                                    by = list(Group.date=corrected$date))
+                                    by = list(Group.date = corrected$date))
 
 hist(corrected_steps_by_day$steps,
      breaks = 20,
