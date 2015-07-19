@@ -1,16 +1,11 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
-Load and analyze activity data, per assignment.
+## Load and analyze activity data, per assignment.
 
-First, some basic setup:
+Setup:
 
 - Load required libraries
-- Set echo=TRUE (per assignment)
+- Set echo = TRUE (per assignment)
 - Disable warnings (because they're annoying -- mostly time zone for POSIXlt)
 
 
@@ -18,7 +13,7 @@ First, some basic setup:
 library(knitr)
 library(lattice)
 
-opts_chunk$set(echo=TRUE, warning=FALSE)
+opts_chunk$set(echo = TRUE, warning = FALSE)
 ```
 
 ## Loading and preprocessing the data
@@ -31,7 +26,7 @@ if (! ("activity.csv" %in% files)) {
     unzip("activity.zip")
 }
 
-steps <- read.csv("activity.csv", as.is=TRUE)
+steps <- read.csv("activity.csv", as.is = TRUE)
 steps$interval <- as.factor(sprintf("%04d", steps$interval))
 ```
 
@@ -58,7 +53,7 @@ hist(steps_by_day$steps,
      xlab = "Steps in a Day")
 ```
 
-![plot of chunk dailyStepsHistogram](figure/dailyStepsHistogram-1.png) 
+![](PA1_template_files/figure-html/dailyStepsHistogram-1.png) 
 
 Calculate mean and median steps per day:
 
@@ -92,7 +87,7 @@ lines(steps_by_interval$interval,
       steps_by_interval$steps)
 ```
 
-![plot of chunk stepsByInterval](figure/stepsByInterval-1.png) 
+![](PA1_template_files/figure-html/stepsByInterval-1.png) 
 
 Find the interval with the maximum number of steps:
 
@@ -104,7 +99,7 @@ max_interval <- steps_by_interval$interval[
     which.max(steps_by_interval$steps == max_steps)]
 ```
 
-The interval with the highest number of steps, 206.1698113,
+The interval with the highest mean number of steps, 206.2,
 begins at 0835.
 
 
@@ -150,7 +145,7 @@ hist(corrected_steps_by_day$steps,
      xlab = "Steps in a Day")
 ```
 
-![plot of chunk showCorrectedValues](figure/showCorrectedValues-1.png) 
+![](PA1_template_files/figure-html/showCorrectedValues-1.png) 
 
 ```r
 # Calculate corrected mean and median.
@@ -203,4 +198,4 @@ xyplot(steps ~ interval | day_type,
                      y = list()))
 ```
 
-![plot of chunk plotWeekendWeekday](figure/plotWeekendWeekday-1.png) 
+![](PA1_template_files/figure-html/plotWeekendWeekday-1.png) 

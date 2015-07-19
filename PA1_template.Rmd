@@ -5,19 +5,19 @@ output:
     keep_md: true
 ---
 
-Load and analyze activity data, per assignment.
+## Load and analyze activity data, per assignment.
 
-First, some basic setup:
+Setup:
 
 - Load required libraries
-- Set echo=TRUE (per assignment)
+- Set echo = TRUE (per assignment)
 - Disable warnings (because they're annoying -- mostly time zone for POSIXlt)
 
 ```{r setup}
 library(knitr)
 library(lattice)
 
-opts_chunk$set(echo=TRUE, warning=FALSE)
+opts_chunk$set(echo = TRUE, warning = FALSE)
 ```
 
 ## Loading and preprocessing the data
@@ -29,7 +29,7 @@ if (! ("activity.csv" %in% files)) {
     unzip("activity.zip")
 }
 
-steps <- read.csv("activity.csv", as.is=TRUE)
+steps <- read.csv("activity.csv", as.is = TRUE)
 steps$interval <- as.factor(sprintf("%04d", steps$interval))
 ```
 
@@ -93,7 +93,7 @@ max_interval <- steps_by_interval$interval[
     which.max(steps_by_interval$steps == max_steps)]
 ```
 
-The interval with the highest number of steps, `r max_steps`,
+The interval with the highest mean number of steps, `r sprintf("%0.1f", max_steps)`,
 begins at `r max_interval`.
 
 
