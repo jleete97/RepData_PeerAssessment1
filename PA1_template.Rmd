@@ -163,6 +163,6 @@ steps$day_type <- factor(
 
 steps_by_interval_and_day_type <- aggregate(steps ~ interval + day_type,
                                             steps,
-                                            function(x) sum(x, na.rm = TRUE))
+                                            function(x) mean(x, na.rm = TRUE))
 
 ```
