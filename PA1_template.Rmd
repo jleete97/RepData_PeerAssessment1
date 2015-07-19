@@ -30,28 +30,27 @@ if (! ("activity.csv" %in% files)) {
 
 steps <- read.csv("activity.csv", as.is=TRUE)
 steps$interval <- as.factor(sprintf("%04d", steps$interval))
-#steps$pdate    <- as.POSIXlt(steps$date, format="%Y-%m-%d")
 ```
 
-We also cast the interval as a factor that looks like "nnnn", and the date in POSIX format.
+We also cast the interval as a factor that looks like "nnnn".
 
 ## What is mean total number of steps taken per day?
 
 Aggregate the steps by day:
 
 ```{r stepsPerDay}
-steps_by_day <- aggregate(x=steps[c("steps")],
-                          FUN="sum",
-                          by=list(Group.date=steps$date))
+steps_by_day <- aggregate(x = steps[c("steps")],
+                          FUN = "sum",
+                          by = list(Group.date=steps$date))
 ```
 
 Histogram of same:
 
 ```{r dailyStepsHistogram}
 hist(steps_by_day$steps,
-     breaks=20,
-     main="Frequency of Steps per Day",
-     xlab="Steps in a Day")
+     breaks = 20,
+     main = "Frequency of Steps per Day",
+     xlab = "Steps in a Day")
 ```
 
 Calculate mean and median steps per day:
@@ -70,14 +69,14 @@ Break down steps by interval and plot:
 ```{r stepsByInterval}
 steps_by_interval <- aggregate(steps ~ interval,
                                steps,
-                               function(x) sum(x, na.rm=TRUE))
+                               function(x) mean(x, na.rm = TRUE))
 
 plot(steps_by_interval$interval,
      steps_by_interval$steps,
-     type="l",
-     main="Mean Steps through the Day",
-     xlab="Five-Minute Interval",
-     ylab="Steps")
+     type = "l",
+     main = "Mean Steps through the Day",
+     xlab = "Five-Minute Interval",
+     ylab = "Steps")
 
 # Lines don't seem to come out, so add this as backup.
 lines(steps_by_interval$interval,
@@ -116,7 +115,7 @@ corrected <- steps # New data set
 for (i in 1:length(corrected$steps)) {
     if (is.na(corrected[i, "steps"])) {
         interval <- corrected[i, "interval"]
-        interval_index = which(steps_by_interval$interval == interval)
+        interval_index <- which(steps_by_interval$interval == interval)
         fillin <- steps_by_interval[interval_index, "steps"]
         corrected[i, "steps"] <- fillin
     }
@@ -126,19 +125,21 @@ for (i in 1:length(corrected$steps)) {
 Calculate statistics on, and plot histogram of, "corrected" data set:
 
 ```{r showCorrectedValues}
-corrected_steps_by_day <- aggregate(x=corrected[c("steps")],
-                                    FUN="sum",
-                                    by=list(Group.date=corrected$date))
+corrected_steps_by_day <- aggregate(x = corrected[c("steps")],
+                                    FUN = "sum",
+                                    by = list(Group.date=corrected$date))
 
 hist(corrected_steps_by_day$steps,
-     breaks=20,
-     main="Frequency of Steps per Day (Corrected)",
-     xlab="Steps in a Day")
+     breaks = 20,
+     main = "Frequency of Steps per Day (Corrected)",
+     xlab = "Steps in a Day")
 
+# Calculate corrected mean and median.
 corrected_mean_steps   <- mean(corrected_steps_by_day$steps, na.rm=TRUE)
 corrected_median_steps <- median(corrected_steps_by_day$steps, na.rm=TRUE)
 
-mean_change_pct <- (corrected_mean_steps / mean_steps - 1) * 100
+# Calculate percent change in corrected values from original values, for display.
+mean_change_pct   <- (corrected_mean_steps / mean_steps - 1) * 100
 median_change_pct <- (corrected_median_steps / median_steps - 1) * 100
 ```
 
@@ -153,10 +154,15 @@ a `r sprintf("%0.3f", median_change_pct)` change from `r sprintf("%0.1f", median
 Add weekday/weekend indicator to data set:
 
 ```{r addTypeOfDayFactor}
+# If day starts with "S", it's a weekend; otherwise a weekday.
 steps$day_type <- factor(
     ifelse(
         grepl("^S", weekdays(as.POSIXlt(steps$date, "%Y-%m-%d")))),
         "weekend",
         "weekday")
+
+steps_by_interval_and_day_type <- aggregate(steps ~ interval + day_type,
+                                            steps,
+                                            function(x) sum(x, na.rm = TRUE))
 
 ```
