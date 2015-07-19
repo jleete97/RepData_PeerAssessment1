@@ -112,9 +112,11 @@ Fill in missing values with mean values for the five-minute interval:
 ```{r fillInMissingValues}
 corrected <- steps # New data set
 
-# Fill in missing values in new data set
+# Fill in missing values in new data set, using mean values from each interval
 for (i in 1:length(corrected$steps)) {
     if (is.na(corrected[i, "steps"])) {
+        # For missing values, look up previously-calculated mean value
+        # for corresponding interval.
         interval <- corrected[i, "interval"]
         interval_index <- which(steps_by_interval$interval == interval)
         fillin <- steps_by_interval[interval_index, "steps"]
