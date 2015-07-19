@@ -144,10 +144,10 @@ median_change_pct <- (corrected_median_steps / median_steps - 1) * 100
 ```
 
 The "corrected" mean number of steps is `r sprintf("%0.1f", corrected_mean_steps)`,
-a `r sprintf("%0.3f", mean_change_pct)` change from `r sprintf("%0.1f", mean_steps)`.
+a `r sprintf("%0.3f", mean_change_pct)`% change from `r sprintf("%0.1f", mean_steps)`.
 
 The "corrected" median number of steps is `r sprintf("%0.1f", corrected_median_steps)`,
-a `r sprintf("%0.3f", median_change_pct)` change from `r sprintf("%0.1f", median_steps)`.
+a `r sprintf("%0.3f", median_change_pct)`% change from `r sprintf("%0.1f", median_steps)`.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
