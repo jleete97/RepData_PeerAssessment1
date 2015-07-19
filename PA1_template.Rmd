@@ -92,6 +92,13 @@ begins at `r max_interval`.
 
 ## Imputing missing values
 
+Count missing values:
+
+```{r countMissingValues}
+missing_value_count = sum(is.na(steps$steps))
+```
+
+There are `r missing_value_count` missing values in the original data set.
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
