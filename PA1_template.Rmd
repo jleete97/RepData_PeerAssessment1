@@ -11,12 +11,13 @@ First, some basic setup:
 
 - Load required libraries
 - Set echo=TRUE (per assignment)
+- Disable warnings (because they're annoying -- mostly time zone for POSIXlt)
 
 ```{r setup}
 library(knitr)
-library(plyr)
-library(dplyr)
-opts_chunk$set(echo=TRUE)
+library(lattice)
+
+opts_chunk$set(echo=TRUE, warning=FALSE)
 ```
 
 ## Loading and preprocessing the data
@@ -164,5 +165,20 @@ steps$day_type <- factor(
 steps_by_interval_and_day_type <- aggregate(steps ~ interval + day_type,
                                             steps,
                                             function(x) mean(x, na.rm = TRUE))
+```
 
+Plot data by weekend/weekday:
+
+```{r plotWeekendWeekday}
+xyplot(steps ~ interval | day_type,
+       data = steps_by_interval_and_day_type,
+       layout = c(1, 2),
+       panel = function(x, y, ...) {
+           panel.lines(x, y, ...)
+       },
+       main = "Weekend vs. Weekday Activity Patterns",
+       xlab = "Interval",
+       ylab = "Number of steps",
+       scales = list(x = list(draw = FALSE),
+                     y = list()))
 ```
