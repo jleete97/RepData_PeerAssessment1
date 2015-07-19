@@ -1,4 +1,9 @@
-# Reproducible Research: Peer Assessment 1
+---
+title: "Reproducible Research: Peer Assessment 1"
+output: 
+  html_document:
+    keep_md: true
+---
 
 ## Load and analyze activity data, per assignment.
 
@@ -53,7 +58,7 @@ hist(steps_by_day$steps,
      xlab = "Steps in a Day")
 ```
 
-![](PA1_template_files/figure-html/dailyStepsHistogram-1.png) 
+![plot of chunk dailyStepsHistogram](figure/dailyStepsHistogram-1.png) 
 
 Calculate mean and median steps per day:
 
@@ -87,7 +92,7 @@ lines(steps_by_interval$interval,
       steps_by_interval$steps)
 ```
 
-![](PA1_template_files/figure-html/stepsByInterval-1.png) 
+![plot of chunk stepsByInterval](figure/stepsByInterval-1.png) 
 
 Find the interval with the maximum number of steps:
 
@@ -120,9 +125,11 @@ Fill in missing values with mean values for the five-minute interval:
 ```r
 corrected <- steps # New data set
 
-# Fill in missing values in new data set
+# Fill in missing values in new data set, using mean values from each interval
 for (i in 1:length(corrected$steps)) {
     if (is.na(corrected[i, "steps"])) {
+        # For missing values, look up previously-calculated mean value
+        # for corresponding interval.
         interval <- corrected[i, "interval"]
         interval_index <- which(steps_by_interval$interval == interval)
         fillin <- steps_by_interval[interval_index, "steps"]
@@ -137,7 +144,7 @@ Calculate statistics on, and plot histogram of, "corrected" data set:
 ```r
 corrected_steps_by_day <- aggregate(x = corrected[c("steps")],
                                     FUN = "sum",
-                                    by = list(Group.date=corrected$date))
+                                    by = list(Group.date = corrected$date))
 
 hist(corrected_steps_by_day$steps,
      breaks = 20,
@@ -145,7 +152,7 @@ hist(corrected_steps_by_day$steps,
      xlab = "Steps in a Day")
 ```
 
-![](PA1_template_files/figure-html/showCorrectedValues-1.png) 
+![plot of chunk showCorrectedValues](figure/showCorrectedValues-1.png) 
 
 ```r
 # Calculate corrected mean and median.
@@ -198,4 +205,4 @@ xyplot(steps ~ interval | day_type,
                      y = list()))
 ```
 
-![](PA1_template_files/figure-html/plotWeekendWeekday-1.png) 
+![plot of chunk plotWeekendWeekday](figure/plotWeekendWeekday-1.png) 
