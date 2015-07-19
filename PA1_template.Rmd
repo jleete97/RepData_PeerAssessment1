@@ -149,3 +149,14 @@ The "corrected" median number of steps is `r sprintf("%0.1f", corrected_median_s
 a `r sprintf("%0.3f", median_change_pct)` change from `r sprintf("%0.1f", median_steps)`.
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+Add weekday/weekend indicator to data set:
+
+```{r addTypeOfDayFactor}
+steps$day_type <- factor(
+    ifelse(
+        grepl("^S", weekdays(as.POSIXlt(steps$date, "%Y-%m-%d")))),
+        "weekend",
+        "weekday")
+
+```
